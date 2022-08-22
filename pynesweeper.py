@@ -1,6 +1,6 @@
+from array import array
 import random
-
-from numpy import number
+import time
 
 class Board :
     """ An object which describe the board composition """
@@ -33,30 +33,24 @@ class Board :
     def __calcCellsValues(self) -> None :
         for i in range(self.dimY) :
             for j in range(self.dimX) :
-                if self.boardMatrix[i][j] != 9 :
+                if self.getCellValue(j,i) not in [-1,9] :
                     aroundValues = []
-                    if i != 0 :
-                        if j != 0 :
-                            aroundValues.append(self.boardMatrix[i-1][j-1])
-                        aroundValues.append(self.boardMatrix[i-1][j])
-                        if j != self.dimX - 1 :
-                            aroundValues.append(self.boardMatrix[i-1][j+1])
-                    if j != 0 :
-                        aroundValues.append(self.boardMatrix[i][j-1])
-                    if j != self.dimX - 1 :
-                        aroundValues.append(self.boardMatrix[i][j+1])
-                    if i != self.dimY -1 :
-                        if j != 0 :
-                            aroundValues.append(self.boardMatrix[i+1][j-1])
-                        aroundValues.append(self.boardMatrix[i+1][j])
-                        if j != self.dimX - 1 :
-                            aroundValues.append(self.boardMatrix[i+1][j+1])
+                    aroundValues.append(self.getCellValue(j-1,i-1))
+                    aroundValues.append(self.getCellValue(j,i-1))
+                    aroundValues.append(self.getCellValue(j+1,i-1))
+                    aroundValues.append(self.getCellValue(j-1,i))
+                    aroundValues.append(self.getCellValue(j+1,i))
+                    aroundValues.append(self.getCellValue(j-1,i+1))
+                    aroundValues.append(self.getCellValue(j,i+1))
+                    aroundValues.append(self.getCellValue(j+1,i+1))
                     self.boardMatrix[i][j] = aroundValues.count(9)
                     
                     
     
-    def getCaseValue(self,posX : int, posY : int) -> int :
-        return self.boardMatrix[posY],[posX]
+    def getCellValue(self,posX : int, posY : int) -> int :
+        if posX >= 0 and posX < self.dimX and posY >= 0 and posY < self.dimY :
+            return self.boardMatrix[posY][posX]
+        return -1
     
     def debugMe(self) -> None :
         for i in self.boardMatrix :
